@@ -1,8 +1,14 @@
 package agendaspring.controllers;
 
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
+import java.util.List;
 
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.ModelAndView;
+
+import agendaspring.daos.ContatoDAO;
 import agendaspring.models.Contato;
 
 @Controller
@@ -14,14 +20,22 @@ public class ContatosController {
 		return "contatos/form";
 	}
 	
-	@RequestMapping("/contatos")
+	@PostMapping("/contatos")
 	public String adicionar(Contato contato) {
 		System.out.println("Chamou o método de adicionar");
-		System.out.println("Nome: " + contato.getNome());
-		System.out.println("Email: " + contato.getEmail());
-		System.out.println("Endereço: " + contato.getEndereco());
-		System.out.println("Data de Nascimento: " + contato.getDataNascimento());
+		ContatoDAO contatoDao = new ContatoDAO();
+		contatoDao.inserir(contato);
 		return "contatos/ok";
+	}
+	
+	@GetMapping("/contatos")
+	public ModelAndView listar( ) {
+		System.out.println("Chamou o metódo de listagem");
+		ContatoDAO contatoDao = new ContatoDAO();
+		List<Contato> lista = contatoDao.getLista();
+		ModelAndView model = new ModelAndView("contatos/lista");
+		model.addObject("contatos", lista);
+		return model;
 	}
 
 }

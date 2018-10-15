@@ -8,7 +8,7 @@
 </head>
 <body>
 	<h1>Adicionar contato</h1>
-	<form action="/agendaspring/contatos">
+	<form action="/agendaspring/contatos" method="post">
 		Nome: <input type="text" name="nome">
 		
 		Email: <input type="text" name="email">
