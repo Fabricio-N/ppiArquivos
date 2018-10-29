@@ -13,29 +13,38 @@ import agendaspring.models.Contato;
 
 @Controller
 public class ContatosController {
-	
+
 	@RequestMapping("/contatos/form")
 	public String form() {
 		System.out.println("Chamou o meu método");
 		return "contatos/form";
 	}
-	
+
 	@PostMapping("/contatos")
 	public String adicionar(Contato contato) {
 		System.out.println("Chamou o método de adicionar");
 		ContatoDAO contatoDao = new ContatoDAO();
 		contatoDao.inserir(contato);
-		return "contatos/ok";
+		return "redirect:contatos";
 	}
-	
+
 	@GetMapping("/contatos")
-	public ModelAndView listar( ) {
+	public ModelAndView listar() {
 		System.out.println("Chamou o metódo de listagem");
 		ContatoDAO contatoDao = new ContatoDAO();
 		List<Contato> lista = contatoDao.getLista();
 		ModelAndView model = new ModelAndView("contatos/lista");
 		model.addObject("contatos", lista);
 		return model;
+	}
+
+	@RequestMapping("/contatos/remover")
+	public String remover(Contato contato) {
+		System.out.println("Chamou o método remover");
+		ContatoDAO contatoDao = new ContatoDAO();
+		contatoDao.remover(contato);
+		return "redirect:../contatos";
+
 	}
 
 }
