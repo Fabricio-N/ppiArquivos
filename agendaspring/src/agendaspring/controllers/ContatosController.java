@@ -1,5 +1,6 @@
 package agendaspring.controllers;
 
+
 import java.util.List;
 
 import org.springframework.stereotype.Controller;
@@ -12,15 +13,16 @@ import agendaspring.daos.ContatoDAO;
 import agendaspring.models.Contato;
 
 @Controller
+@RequestMapping("/contatos")
 public class ContatosController {
 
-	@RequestMapping("/contatos/form")
+	@RequestMapping("/form")
 	public String form() {
 		System.out.println("Chamou o meu método");
 		return "contatos/form";
 	}
 
-	@PostMapping("/contatos")
+	@PostMapping
 	public String adicionar(Contato contato) {
 		System.out.println("Chamou o método de adicionar");
 		ContatoDAO contatoDao = new ContatoDAO();
@@ -28,7 +30,7 @@ public class ContatosController {
 		return "redirect:contatos";
 	}
 
-	@GetMapping("/contatos")
+	@GetMapping
 	public ModelAndView listar() {
 		System.out.println("Chamou o metódo de listagem");
 		ContatoDAO contatoDao = new ContatoDAO();
@@ -38,13 +40,31 @@ public class ContatosController {
 		return model;
 	}
 
-	@RequestMapping("/contatos/remover")
+	@RequestMapping("/remover")
 	public String remover(Contato contato) {
 		System.out.println("Chamou o método remover");
 		ContatoDAO contatoDao = new ContatoDAO();
 		contatoDao.remover(contato);
 		return "redirect:../contatos";
 
+	}
+	
+	@RequestMapping("/selecionar")
+	public ModelAndView selecionar(Contato contato) {
+		ContatoDAO contatoDAO = new ContatoDAO();
+		contato = contatoDAO.getById(contato.getId());
+		
+		ModelAndView model = new ModelAndView("contatos/form-alterar"); 
+		model.addObject("contato", contato);
+		return model;
+	}
+	
+	@PostMapping("/alterar")
+	public String alterar(Contato contato) {
+		System.out.println("Chamou o método alterar");
+		ContatoDAO contatoDAO = new ContatoDAO();
+		contatoDAO.alterar(contato);
+		return "redirect:../contatos";
 	}
 
 }
